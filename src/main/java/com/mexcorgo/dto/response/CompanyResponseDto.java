@@ -19,4 +19,6 @@ public class CompanyResponseDto {
     private String headOfOffice;
     private String state;
     private String easyHubCentre;
+    private String minorHub;
+    private String majorHub;
 }

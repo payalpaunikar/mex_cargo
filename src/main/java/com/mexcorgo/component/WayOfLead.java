@@ -1,9 +1,18 @@
 package com.mexcorgo.component;
 
 public enum WayOfLead {
-    PHONE,
-    EMAIL,
-    WHATSAPP,
-    PHYSICAL_MEETING,
-    NET_SEARCHING
+    VENDOR,
+    REFERENCE,
+    BULK_LIST,
+    PERSONAL_CLIENT,
+    GMB,
+    LEAD_PURCHASE,
+    SOCIAL_MEDIA,
+    MARKETING,
+    PHYSICAL_LINK,
+    ADVERTISEMENT,
+    ASSOCIATED_PARTNER,
+    MOVING_PARTNER,
+    SALES_TEAM_REFERRAL,
+    OTHER
 }

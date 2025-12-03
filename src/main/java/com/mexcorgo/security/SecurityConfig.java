@@ -47,10 +47,23 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
-                .cors(Customizer.withDefaults()) // Enable CORS
+                .cors(cors-> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(request-> request
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/auth/login","/test","/auth/register/admin",
+                                "/get/access-token/by/refresh-token","/forgot-password",
+                                "/v1/api/**",
+                                "/v2/api-docs",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/swagger-ui.html").permitAll()
                         .requestMatchers("/add/master",
                                 "/update/master/{masterId}",
                                 "/delete/master/{masterId}").hasRole("Admin")

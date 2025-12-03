@@ -20,6 +20,7 @@ public interface LeadRepository extends JpaRepository<Lead,Long> {
 
     @Query("SELECT l.leadId AS leadId, l.leadReferenceNo AS leadReferenceNo, l.leadDate AS leadDate, " +
             "l.leadTime AS leadTime, l.wayOfLead AS wayOfLead, l.modeOfCommunication AS modeOfCommunication, " +
+            "l.dataReference AS dataReference, "+
             "l.isQuatationCreated AS isQuatationCreated," +
             "l.isQuatationSendToUser As isQuatationSendToUser, n.followUpStatus AS followUpStatus,st.isCompleted AS isVerbalConfirmationTaskCompleted "+
             "FROM Lead l JOIN l.note n LEFT JOIN SalesAndMarketingTasks st ON st.lead.leadId = l.leadId AND st.name = 'Verbal Confirmation' " +

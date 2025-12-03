@@ -17,4 +17,6 @@ public class CompanyRequest {
     private String headOfOffice;
     private String state;
     private String easyHubCentre;
+    private String minorHub;
+    private String majorHub;
 }

@@ -1,6 +1,8 @@
 package com.mexcorgo.dto.response;
 
+import com.mexcorgo.component.DataReference;
 import com.mexcorgo.component.FollowUpStatus;
+import com.mexcorgo.component.ModeOfCommunication;
 import com.mexcorgo.component.WayOfLead;
 
 
@@ -22,7 +24,8 @@ public interface LeadResponseInterface {
     LocalDate getLeadDate();
     LocalTime getLeadTime();
     WayOfLead getWayOfLead();
-    String getModeOfCommunication();
+    ModeOfCommunication getModeOfCommunication();
+    DataReference getDataReference();
     Boolean getIsQuatationCreated();
     Boolean getIsQuatationSendToUser();
     FollowUpStatus getfollowUpStatus();

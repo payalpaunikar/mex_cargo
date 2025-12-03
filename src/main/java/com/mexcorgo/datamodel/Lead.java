@@ -3,6 +3,8 @@ package com.mexcorgo.datamodel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mexcorgo.component.DataReference;
+import com.mexcorgo.component.ModeOfCommunication;
 import com.mexcorgo.component.WayOfLead;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,7 +35,12 @@ public class Lead {
 
        @Enumerated(EnumType.STRING)
        private WayOfLead wayOfLead;
-       private String modeOfCommunication;
+
+       @Enumerated(EnumType.STRING)
+       private ModeOfCommunication modeOfCommunication;
+
+       @Enumerated(EnumType.STRING)
+       private DataReference dataReference;
 
        @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
        @JoinColumn(name = "company_id")
@@ -74,6 +81,7 @@ public class Lead {
 
        @Column(nullable = false)
        private Boolean isQuatationSendToUser = false;
+
 
 
 }

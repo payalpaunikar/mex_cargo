@@ -175,6 +175,7 @@ public class LeadService {
             leadResponseDto.setLeadTime(lead.getLeadTime());
             leadResponseDto.setWayOfLead(lead.getWayOfLead());
             leadResponseDto.setModeOfCommunication(lead.getModeOfCommunication());
+            leadResponseDto.setDataReference(lead.getDataReference());
             leadResponseDto.setIsQuatationCreated(lead.getIsQuatationCreated());
             leadResponseDto.setIsQuatationSendToUser(lead.getIsQuatationSendToUser());
             leadResponseDto.setFollowUpStatus(lead.getfollowUpStatus());
@@ -226,6 +227,7 @@ public class LeadService {
       leadResponseDto.setLeadTime(leadResponseInterface.getLeadTime());
       leadResponseDto.setWayOfLead(leadResponseInterface.getWayOfLead());
       leadResponseDto.setModeOfCommunication(leadResponseInterface.getModeOfCommunication());
+      leadResponseDto.setDataReference(leadResponseInterface.getDataReference());
       return leadResponseDto;
     }
 
@@ -239,6 +241,7 @@ public class LeadService {
         existingLead.setLeadReferenceNo(leadRequestDto.getLeadReferenceNo());
         existingLead.setWayOfLead(leadRequestDto.getWayOfLead());
         existingLead.setModeOfCommunication(leadRequestDto.getModeOfCommunication());
+        existingLead.setDataReference(leadRequestDto.getDataReference());
 
         Lead saveLead = leadRepository.save(existingLead);
 
@@ -290,6 +293,8 @@ public class LeadService {
          existingCompany.setState(companyRequest.getState());
          existingCompany.setHeadOfOffice(companyRequest.getHeadOfOffice());
          existingCompany.setEasyHubCentre(companyRequest.getEasyHubCentre());
+         existingCompany.setMajorHub(companyRequest.getMajorHub());
+         existingCompany.setMinorHub(companyRequest.getMinorHub());
 
        Company saveCompany = companyRepository.save(existingCompany);
 
@@ -322,7 +327,7 @@ public class LeadService {
         existingNeed.setCommodity(needRequest.getCommodity());
         existingNeed.setCommodityValue(needRequest.getCommodityValue());
         existingNeed.setSize(needRequest.getSize());
-        existingNeed.setInsuranceFacilityOfGoods(needRequest.getInsuranceFacilityOfGoods());
+       // existingNeed.setInsuranceFacilityOfGoods(needRequest.getInsuranceFacilityOfGoods());
         existingNeed.setGoodTransport(needRequest.getGoodTransport());
         existingNeed.setWhenWeGetGoods(needRequest.getWhenWeGetGoods());
         existingNeed.setVehicleValue(needRequest.getVehicleValue());
@@ -404,6 +409,7 @@ public class LeadService {
         leadResponseDto.setLeadTime(lead.getLeadTime());
         leadResponseDto.setWayOfLead(lead.getWayOfLead());
         leadResponseDto.setModeOfCommunication(lead.getModeOfCommunication());
+        leadResponseDto.setDataReference(lead.getDataReference());
         return leadResponseDto;
     }
 
@@ -472,6 +478,8 @@ public class LeadService {
         newCompany.setCompanySetUp(createLeadRequest.getCompanySetUp());
         newCompany.setCompanySector(createLeadRequest.getCompanySector());
         newCompany.setEasyHubCentre(createLeadRequest.getEasyHubCentre());
+        newCompany.setMinorHub(createLeadRequest.getMinorHub());
+        newCompany.setMajorHub(createLeadRequest.getMajorHub());
         return newCompany;
     }
 
@@ -491,31 +499,78 @@ public class LeadService {
     private Need converCreatedLeadIntoNeed(CreateLeadRequest createLeadRequest,Need newNeed){
         newNeed.setSource(createLeadRequest.getSource());
         newNeed.setDestination(createLeadRequest.getDestination());
-        newNeed.setMovingDateAndTime(LocalDateTime.parse(createLeadRequest.getMovingDateAndTime()));
-        newNeed.setReceivingDateAndTime(LocalDateTime.parse(createLeadRequest.getReceivingDateTime()));
+        newNeed.setOriginFloorNo(createLeadRequest.getOriginFloorNo());
+        newNeed.setDestinationFloorNo(createLeadRequest.getDestinationFloorNo());
+        newNeed.setOriginDetailsAddress(createLeadRequest.getOriginDetailsAddress());
+        newNeed.setDestinationDetailsAddress(createLeadRequest.getDestinationDetailsAddress());
+        newNeed.setIsLiftAvailableInOrigin(createLeadRequest.getIsLiftAvailableInOrigin());
+        newNeed.setIsLiftAvailableInDestination(createLeadRequest.getIsLiftAvailableInDestination());
+        newNeed.setSpecialService(createLeadRequest.getSpecialService());
+
+        if (createLeadRequest.getMovingDateAndTime() == null){
+            newNeed.setMovingDateAndTime(null);
+        }
+        else {
+            newNeed.setMovingDateAndTime(LocalDateTime.parse(createLeadRequest.getMovingDateAndTime()));
+        }
+        if (createLeadRequest.getReceivingDateTime() == null){
+            newNeed.setReceivingDateAndTime(null);
+        }
+        else {
+            newNeed.setReceivingDateAndTime(LocalDateTime.parse(createLeadRequest.getReceivingDateTime()));
+        }
         newNeed.setCommodity(createLeadRequest.getCommodity());
         newNeed.setSize(createLeadRequest.getSize());
         newNeed.setWeight(createLeadRequest.getWeight());
+        newNeed.setSecondWeightValue(createLeadRequest.getSecondWeightValue());
+        newNeed.setOverAllWeightValue(createLeadRequest.getOverAllWeightValue());
         newNeed.setTypeOfTransporatation(createLeadRequest.getTypeOfTransportation());
         newNeed.setSizeOfTransporatation(createLeadRequest.getSizeOfTransportation());
+        newNeed.setPreferredRoot(createLeadRequest.getPreferredRoot());
         newNeed.setCommodityValue(createLeadRequest.getCommodityValue());
         newNeed.setVehicleValue(createLeadRequest.getVehicleValue());
         newNeed.setGoodTransport(createLeadRequest.getGoodsTransport());
         newNeed.setCarTransport(createLeadRequest.getCarTransport());
-        newNeed.setCarMovingDate(createLeadRequest.getCarMovingDate());
-        newNeed.setCarMovingTime(createLeadRequest.getCarMovingTime());
+
+        if (createLeadRequest.getCarMovingDate() == null){
+            newNeed.setCarMovingDate(null);
+        }
+        else {
+            newNeed.setCarMovingDate(createLeadRequest.getCarMovingDate());
+        }
+        if (createLeadRequest.getCarMovingTime() == null){
+            newNeed.setCarMovingTime(null);
+        }
+        else {
+            newNeed.setCarMovingTime(createLeadRequest.getCarMovingTime());
+        }
+
+        if (createLeadRequest.getCarReceivingDate() == null){
+            newNeed.setCarMovingDate(null);
+        }
+        else {
+            newNeed.setCarReceivingDate(createLeadRequest.getCarReceivingDate());
+        }
+        if (createLeadRequest.getCarReceivingTime()==null) {
+            newNeed.setCarReceivingTime(null);
+        }
+        else{
+            newNeed.setCarReceivingTime(createLeadRequest.getCarReceivingTime());
+        }
         newNeed.setWhenWeGetGoods(createLeadRequest.getWhenWeGetGoods());
         newNeed.setAnyThingsElseRatherThanGood(createLeadRequest.getAnyThingElseRatherThanGood());
         newNeed.setAnyWareHouseFacilityRatherThanThisThings(createLeadRequest.getAnyWarehouseFacilityRatherThanThisThings());
-        newNeed.setInsuranceFacilityOfGoods(createLeadRequest.getInsuranceFacilityOfGoods());
+       // newNeed.setInsuranceFacilityOfGoods(createLeadRequest.getInsuranceFacilityOfGoods());
        // newNeed.setCommudityAndOtherGoodsInsuranceFacility(createLeadRequest.getCommodityAndOtherGoodsInsuranceFacility());
         newNeed.setRiskCoverageGood(createLeadRequest.getRiskCoverageGood());
         newNeed.setOtherServices(createLeadRequest.getOtherServices());
 
         List<AdditionalNeed> newAdditionalNeed = new ArrayList<>();
 
-        newNeed.setAdditionalNeed(convertAdditionalNeedRequesrtIntoAdditinalNeedList
-                (createLeadRequest.getAdditionalNeedRequests(),newAdditionalNeed,newNeed));
+        if (createLeadRequest.getAdditionalNeedRequests() !=null) {
+            newNeed.setAdditionalNeed(convertAdditionalNeedRequesrtIntoAdditinalNeedList
+                    (createLeadRequest.getAdditionalNeedRequests(), newAdditionalNeed, newNeed));
+        }
 
         return newNeed;
 
@@ -531,6 +586,7 @@ public class LeadService {
                     newAdditionalNeed.setArticleName(additionalNeed.getArticleName());
                     newAdditionalNeed.setArticleValue(additionalNeed.getArticleValue());
                     newAdditionalNeed.setArticleDimension(additionalNeed.getArticleDimension());
+                    newAdditionalNeed.setArticleWeight(additionalNeed.getArticleWeight());
                     newAdditionalNeed.setNeed(newNeed);
 
                     return newAdditionalNeed;
@@ -541,10 +597,20 @@ public class LeadService {
 
 
     private Lead convertCreatedLeadRequestIntoLeed(CreateLeadRequest createLeadRequest,Lead createNewLead){
-        createNewLead.setLeadDate(createLeadRequest.getDate());
-        createNewLead.setLeadTime(createLeadRequest.getTime());
+        if(createLeadRequest.getDate() == null){
+            createNewLead.setLeadDate(null);
+        }else {
+            createNewLead.setLeadDate(createLeadRequest.getDate());
+        }
+        if (createLeadRequest.getTime() == null){
+            createNewLead.setLeadTime(null);
+        }
+        {
+            createNewLead.setLeadTime(createLeadRequest.getTime());
+        }
         createNewLead.setWayOfLead(createLeadRequest.getWayOfLead());
         createNewLead.setModeOfCommunication(createLeadRequest.getModeOfCommunication());
+        createNewLead.setDataReference(createLeadRequest.getDataReference());
 
         return createNewLead;
     }
@@ -552,20 +618,38 @@ public class LeadService {
 
     private Note convertCreateLeadRequestIntoNote(CreateLeadRequest createLeadRequest,Note newNote,User currentUser){
         newNote.setRemark(createLeadRequest.getRemark());
-        newNote.setDate(LocalDate.parse(createLeadRequest.getRemarkDate()));
-        newNote.setTime(LocalTime.parse(createLeadRequest.getRemarkTime()));
+        if (createLeadRequest.getRemarkDate() == null){
+            newNote.setDate(null);
+        }else {
+            newNote.setDate(LocalDate.parse(createLeadRequest.getRemarkDate()));
+        }
+
+        if (createLeadRequest.getRemarkTime() == null){
+            newNote.setTime(null);
+        }
+        else {
+            newNote.setTime(LocalTime.parse(createLeadRequest.getRemarkTime()));
+        }
         newNote.setRating(createLeadRequest.getRating());
         newNote.setFollowUpStatus(createLeadRequest.getFollowUpStatus());
 
         FollowUp newFollowUp = new FollowUp();
-        newNote.setFollowUps(List.of(convertFollowUpRequestIntoFollowUp(createLeadRequest.getFollowUpRequest(),newFollowUp,currentUser,newNote)));
+        if (createLeadRequest.getFollowUpRequest() !=null) {
+            newNote.setFollowUps(List.of(convertFollowUpRequestIntoFollowUp(createLeadRequest.getFollowUpRequest(), newFollowUp, currentUser, newNote)));
+        }
 
         return newNote;
     }
 
 
     private FollowUp convertFollowUpRequestIntoFollowUp(FollowUpRequest followUpRequest, FollowUp newFollowUp, User currentUser, Note newNote){
-        newFollowUp.setFollowUpDate(LocalDate.parse(followUpRequest.getFollowUpDate()));
+
+        if (followUpRequest.getFollowUpDate() == null) {
+            newFollowUp.setFollowUpDate(null);
+        }
+        else {
+            newFollowUp.setFollowUpDate(LocalDate.parse(followUpRequest.getFollowUpDate()));
+        }
         newFollowUp.setFollowUpRemark(followUpRequest.getFollowUpRemark());
         newFollowUp.setUser(currentUser);
         newFollowUp.setNote(newNote);
@@ -601,6 +685,7 @@ public class LeadService {
         leadResponseDto.setLeadTime(lead.getLeadTime());
         leadResponseDto.setModeOfCommunication(lead.getModeOfCommunication());
         leadResponseDto.setWayOfLead(lead.getWayOfLead());
+        leadResponseDto.setDataReference(lead.getDataReference());
 
         getLeadFullDetails.setLead(leadResponseDto);
 
@@ -645,6 +730,7 @@ public class LeadService {
         lead.setLeadTime(leadResponseDto.getLeadTime());
         lead.setWayOfLead(leadResponseDto.getWayOfLead());
         lead.setModeOfCommunication(leadResponseDto.getModeOfCommunication());
+        lead.setDataReference(leadResponseDto.getDataReference());
 
         Company company = companyMapper.convertCompanyReponseDtoIntoCompany(getLeadFullDetails.getCompany());
         lead.setCompany(company);
@@ -667,6 +753,7 @@ public class LeadService {
        saveLeadResponseDto.setLeadTime(saveLead.getLeadTime());
        saveLeadResponseDto.setModeOfCommunication(saveLead.getModeOfCommunication());
        saveLeadResponseDto.setWayOfLead(saveLead.getWayOfLead());
+       saveLeadResponseDto.setDataReference(saveLead.getDataReference());
 
        CompanyResponseDto companyResponseDto = companyResponseMapper.toCompanyResponseDto(saveLead.getCompany());
        CompanyEmployeeResponseDto companyEmployeeResponseDto = companyEmployeeResponseMapper.toCompanyEmployeeResponseDto(saveLead.getCompanyEmployee());
@@ -712,6 +799,7 @@ public class LeadService {
                             lead.getLeadTime(),
                             lead.getWayOfLead(),
                             lead.getModeOfCommunication(),
+                            lead.getDataReference(),
                             lead.getIsQuatationCreated(),
                             lead.getIsQuatationSendToUser(),
                             lead.getNote().getFollowUpStatus(),

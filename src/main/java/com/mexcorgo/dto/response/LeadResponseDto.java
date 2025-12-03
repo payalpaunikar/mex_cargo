@@ -1,6 +1,8 @@
 package com.mexcorgo.dto.response;
 
+import com.mexcorgo.component.DataReference;
 import com.mexcorgo.component.FollowUpStatus;
+import com.mexcorgo.component.ModeOfCommunication;
 import com.mexcorgo.component.WayOfLead;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +25,8 @@ public class LeadResponseDto {
     private LocalDate leadDate;
     private LocalTime leadTime;
     private WayOfLead wayOfLead;
-    private String modeOfCommunication;
+    private ModeOfCommunication modeOfCommunication;
+    private DataReference dataReference;
     private Boolean isQuatationCreated;
     private Boolean isQuatationSendToUser;
     private FollowUpStatus followUpStatus;

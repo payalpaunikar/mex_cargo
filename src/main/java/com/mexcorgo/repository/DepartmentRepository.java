@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department,Long> {
@@ -18,4 +19,6 @@ public interface DepartmentRepository extends JpaRepository<Department,Long> {
 
     @Query("Select d From Department d Join Fetch d.roles where d.departmentId= :departmentId")
     Department getDepartmentWithRoles(@Param("departmentId")Long departmentId);
+
+    Optional<Department> findByDepartmentNameIgnoreCase(String name);
 }

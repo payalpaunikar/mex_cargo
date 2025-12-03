@@ -1,6 +1,7 @@
 package com.mexcorgo.datamodel;
 
 
+import com.mexcorgo.component.EmployeeStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,4 +42,8 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
+
+
+    @Enumerated(EnumType.STRING)
+    private EmployeeStatus employeeStatus;
 }

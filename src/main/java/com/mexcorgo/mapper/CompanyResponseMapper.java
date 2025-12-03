@@ -8,7 +8,8 @@ import org.mapstruct.Mapper;
 public interface CompanyResponseMapper {
 
 //    public abstract CompanyResponseDto toCompanyResponseDto(Company company);
-    CompanyResponseDto toCompanyResponseDto(Company company);
+ //  CompanyResponseDto toCompanyResponseDto(Company company);
 
+    CompanyResponseDto toCompanyResponseDto(Company company);
 
 }

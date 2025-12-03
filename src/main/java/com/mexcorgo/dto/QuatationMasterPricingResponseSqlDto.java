@@ -1,6 +1,7 @@
 package com.mexcorgo.dto;
 
 
+import com.mexcorgo.component.Commodity;
 import com.mexcorgo.component.OtherServices;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class QuatationMasterPricingResponseSqlDto {
     private String leadReferenceNo;
     private String source;
     private String destination;
-    private String commodity;
+    private Commodity commodity;
     private String size;
     private String weight;
     private String typeOfTransporatation;

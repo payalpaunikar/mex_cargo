@@ -1,6 +1,7 @@
 package com.mexcorgo.dto.response;
 
 
+import com.mexcorgo.component.Commodity;
 import com.mexcorgo.component.OtherServices;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.time.LocalTime;
 public class NeedEmailDetails {
     private String source;
     private String destination;
-    private String commodity;
+    private Commodity commodity;
     private String size;
     private String weight;
     private String typeOfTransporatation;

@@ -13,4 +13,5 @@ public class AdditionalNeedRequest {
     private String articleName;
     private String articleValue;
     private String articleDimension;
+    private String articleWeight;
 }

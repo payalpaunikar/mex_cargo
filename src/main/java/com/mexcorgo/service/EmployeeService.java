@@ -1,15 +1,15 @@
 package com.mexcorgo.service;
 
 
+import com.mexcorgo.component.EmployeeStatus;
 import com.mexcorgo.datamodel.Department;
 import com.mexcorgo.datamodel.Role;
 import com.mexcorgo.datamodel.User;
 import com.mexcorgo.dto.request.EmployeeRequest;
+import com.mexcorgo.dto.response.EmployeeDetailsDescriptionResponse;
 import com.mexcorgo.dto.response.EmployeeResponse;
-import com.mexcorgo.exception.HeadAlredyExitException;
-import com.mexcorgo.exception.UnauthorizedDepartmentAccessException;
-import com.mexcorgo.exception.UnauthorizedException;
-import com.mexcorgo.exception.UserNotFoundException;
+import com.mexcorgo.dto.response.GetAndUpdateEmployeeDto;
+import com.mexcorgo.exception.*;
 import com.mexcorgo.repository.DepartmentRepository;
 import com.mexcorgo.repository.RoleRepository;
 import com.mexcorgo.repository.UserRepository;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
 
 @Service
@@ -144,6 +145,7 @@ public class EmployeeService {
         newUser.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
         newUser.setRole(role);
         newUser.setDepartment(department);
+        newUser.setEmployeeStatus(EmployeeStatus.WORKING);
        User saveUser = userRepository.save(newUser);
        return saveUser;
     }
@@ -155,7 +157,113 @@ public class EmployeeService {
         employeeResponse.setMobileNo(user.getMobileNumber());
         employeeResponse.setRoleId(user.getRole().getRoleId());
         employeeResponse.setDepartmentId(user.getDepartment().getDepartmentId());
+        employeeResponse.setEmployeeStatus(user.getEmployeeStatus());
 
         return employeeResponse;
     }
+
+
+    public List<EmployeeDetailsDescriptionResponse> getEmployeeListAccordingFilter(String departmentName,String roleName,
+                                                                                   User currentUser){
+
+        Department department = null;
+        Role role = null;
+
+        if (roleName!=null && !roleName.isBlank()){
+            role = roleRepository.findByRoleName(roleName)
+                    .orElseThrow(()-> new ResourceNotFoundException("Role not found with name : "+roleName));
+        }
+
+
+        if (currentUser.getRole().getRoleName().equalsIgnoreCase("Admin")){
+
+            if(departmentName != null && !departmentName.isBlank()) {
+                department = departmentRepository.findByDepartmentNameIgnoreCase(departmentName)
+                        .orElseThrow(()-> new ResourceNotFoundException("Department  not found with name : "+departmentName));
+            }
+
+
+            List<User> users = userRepository.findEmployeeByFilters(department,role);
+
+            List<EmployeeDetailsDescriptionResponse> employeeDetailsDescriptionResponses = users.stream()
+                    .filter(user -> user.getDepartment() !=null)
+                    .map(user -> {
+                        EmployeeDetailsDescriptionResponse employeeDetailsDescriptionResponse = new EmployeeDetailsDescriptionResponse();
+                        employeeDetailsDescriptionResponse.setUserId(user.getUserId());
+                        employeeDetailsDescriptionResponse.setDepartmentName(user.getDepartment().getDepartmentName());
+                        employeeDetailsDescriptionResponse.setRoleName(user.getRole().getRoleName());
+                        employeeDetailsDescriptionResponse.setUserName(user.getUserName());
+                        employeeDetailsDescriptionResponse.setEmailId(user.getEmail());
+                        employeeDetailsDescriptionResponse.setMobileNo(user.getMobileNumber());
+                        employeeDetailsDescriptionResponse.setEmployeeStatus(user.getEmployeeStatus());
+                        return employeeDetailsDescriptionResponse;
+                    }).toList();
+
+            return employeeDetailsDescriptionResponses;
+        }
+
+        if (currentUser.getRole().getRoleName().equalsIgnoreCase("Head")){
+            department = currentUser.getDepartment();
+            List<User> users = userRepository.findEmployeeByFilters(department,role);
+
+            List<EmployeeDetailsDescriptionResponse> employeeDetailsDescriptionResponses = users.stream()
+                    .filter(user ->  !user.getRole().getRoleName().equals(currentUser.getRole().getRoleName()))
+                    .map(user -> {
+                        EmployeeDetailsDescriptionResponse employeeDetailsDescriptionResponse = new EmployeeDetailsDescriptionResponse();
+                        employeeDetailsDescriptionResponse.setUserId(user.getUserId());
+                        employeeDetailsDescriptionResponse.setDepartmentName(user.getDepartment().getDepartmentName());
+                        employeeDetailsDescriptionResponse.setRoleName(user.getRole().getRoleName());
+                        employeeDetailsDescriptionResponse.setUserName(user.getUserName());
+                        employeeDetailsDescriptionResponse.setEmailId(user.getEmail());
+                        employeeDetailsDescriptionResponse.setMobileNo(user.getMobileNumber());
+                        employeeDetailsDescriptionResponse.setEmployeeStatus(user.getEmployeeStatus());
+                        return employeeDetailsDescriptionResponse;
+                    }).toList();
+
+            return employeeDetailsDescriptionResponses;
+
+        }
+
+         throw new UnauthorizedException("You doesn't have authority to access this resources");
+    }
+
+
+    public GetAndUpdateEmployeeDto getEmployeeById(Long empId){
+        User user = userRepository.findById(empId)
+                .orElseThrow(()-> new ResourceNotFoundException("Employee not found with id : "+empId));
+
+        GetAndUpdateEmployeeDto getAndUpdateEmployeeDto = new GetAndUpdateEmployeeDto();
+        getAndUpdateEmployeeDto.setUserId(user.getUserId());
+        getAndUpdateEmployeeDto.setEmailId(user.getEmail());
+        getAndUpdateEmployeeDto.setMobileNo(user.getMobileNumber());
+        getAndUpdateEmployeeDto.setUserName(user.getUserName());
+        getAndUpdateEmployeeDto.setEmployeeStatus(user.getEmployeeStatus());
+
+        return getAndUpdateEmployeeDto;
+    }
+
+
+    public GetAndUpdateEmployeeDto updateEmployeeDto(Long empId,GetAndUpdateEmployeeDto getAndUpdateEmployeeDto){
+        User user = userRepository.findById(empId)
+                .orElseThrow(()-> new ResourceNotFoundException("Employee not found with id : "+empId));
+
+        user.setUserName(getAndUpdateEmployeeDto.getUserName());
+        user.setEmail(getAndUpdateEmployeeDto.getEmailId());
+        user.setMobileNumber(getAndUpdateEmployeeDto.getMobileNo());
+        user.setEmployeeStatus(getAndUpdateEmployeeDto.getEmployeeStatus());
+
+        userRepository.save(user);
+
+        GetAndUpdateEmployeeDto updateEmployeeDto = new GetAndUpdateEmployeeDto();
+        updateEmployeeDto.setUserId(user.getUserId());
+        updateEmployeeDto.setEmailId(user.getEmail());
+        updateEmployeeDto.setMobileNo(user.getMobileNumber());
+        updateEmployeeDto.setUserName(user.getUserName());
+        updateEmployeeDto.setEmployeeStatus(user.getEmployeeStatus());
+
+        return updateEmployeeDto;
+    }
+
+
+
 }

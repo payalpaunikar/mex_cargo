@@ -24,6 +24,8 @@ public class Company {
     private String headOfOffice;
     private String state;
     private String easyHubCentre;
+    private String minorHub;
+    private String majorHub;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonIgnore

@@ -11,12 +11,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class EmployeeResponse {
+public class GetAndUpdateEmployeeDto {
     private Long userId;
     private String userName;
     private String emailId;
     private String mobileNo;
-    private Long roleId;
-    private Long departmentId;
     private EmployeeStatus employeeStatus;
 }

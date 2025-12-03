@@ -1,6 +1,8 @@
 package com.mexcorgo.dto.request;
 
 
+import com.mexcorgo.component.DataReference;
+import com.mexcorgo.component.ModeOfCommunication;
 import com.mexcorgo.component.WayOfLead;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +22,6 @@ public class LeadRequestDto {
     private LocalDate leadDate;
     private LocalTime leadTime;
     private WayOfLead wayOfLead;
-    private String modeOfCommunication;
+    private ModeOfCommunication modeOfCommunication;
+    private DataReference dataReference;
 }

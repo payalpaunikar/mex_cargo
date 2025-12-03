@@ -26,6 +26,8 @@ public class AdditionalNeed {
 
       private String articleDimension;
 
+      private String articleWeight;
+
       @ManyToOne(fetch = FetchType.LAZY)
       @JoinColumn(name = "need_id")
       @JsonIgnore

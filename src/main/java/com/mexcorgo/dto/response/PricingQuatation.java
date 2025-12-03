@@ -1,6 +1,7 @@
 package com.mexcorgo.dto.response;
 
 
+import com.mexcorgo.component.Commodity;
 import com.mexcorgo.component.OtherServices;
 import com.mexcorgo.component.QuatationStatus;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class PricingQuatation {
     private String source;
     private String destination;
     private Long quatationId;
-    private String commodity;
+    private Commodity commodity;
     private String size;
     private String weight;
     private String typeOfTransporatation;
